@@ -1,0 +1,7 @@
+version: '2'
+services:
+  greenplum:
+    build:
+      context: .
+    image: r.haps.pw/greenplum:4.3
+    container_name: greenplum:4.3
