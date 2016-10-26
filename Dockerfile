@@ -7,7 +7,11 @@ MAINTAINER dbaskette@pivotal.io michael@vindahlbang.dk
 
 RUN yum install -q -y unzip which tar more util-linux-ng passwd openssh-clients openssh-server ed m4; yum clean all
 
-COPY * /tmp/
+COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
+COPY docker-entrypoint.sh /
+COPY gpadmin-entrypoint.sh /
+COPY configs/* /tmp/
+COPY greenplum-db-4.3.9.1-build-1-rhel5-x86_64.zip /tmp/
 
 RUN echo root:pivotal | chpasswd \
         && GPFILE="greenplum-db-4.3.9.1-build-1-rhel5-x86_64" \
@@ -23,7 +27,6 @@ RUN echo root:pivotal | chpasswd \
         && hostname > ~/orig_hostname \
         && mv /tmp/run.sh /usr/local/bin/run.sh \
         && chmod +x /usr/local/bin/run.sh \
-        && chmod +x /tmp/start.sh \
         && /usr/sbin/groupadd gpadmin \
         && /usr/sbin/useradd gpadmin -g gpadmin -G wheel \
         && echo "pivotal"|passwd --stdin gpadmin \
@@ -35,9 +38,10 @@ RUN echo root:pivotal | chpasswd \
         && chown -R gpadmin: /usr/local/green* \
         && echo "Waiting 5 seconds for Greenplum to finish initialization..."; sleep 5
 
-EXPOSE 5432 22
 
 VOLUME /gpdata
 
-CMD /tmp/start.sh \
-    && /bin/bash
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+EXPOSE 5432 22
+CMD ["greenplum"]
