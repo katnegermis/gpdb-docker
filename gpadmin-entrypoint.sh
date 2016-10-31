@@ -36,8 +36,4 @@ for f in /docker-entrypoint-initdb.d/*; do
 			echo
 done
 
-if [ "$1" = 'greenplum' ]; then
-    /bin/bash
-fi
-
-exec "$@"
+tail -f /dev/null
