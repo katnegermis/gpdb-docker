@@ -11,10 +11,10 @@ COPY docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
 COPY docker-entrypoint.sh /
 COPY gpadmin-entrypoint.sh /
 COPY configs/* /tmp/
-COPY greenplum-db-4.3.9.1-build-1-rhel5-x86_64.zip /tmp/
+COPY greenplum-db-4.3.10.0-build-1-rhel5-x86_64.zip /tmp/
 
 RUN echo root:pivotal | chpasswd \
-        && GPFILE="greenplum-db-4.3.10.0-build-1-rhel5-x86_64.zip" \
+        && GPFILE="greenplum-db-4.3.10.0-build-1-rhel5-x86_64" \
         && unzip /tmp/$GPFILE.zip -d /tmp/ \
         && rm /tmp/$GPFILE.zip \
         && sed -i s/"more << EOF"/"cat << EOF"/g /tmp/$GPFILE.bin \
