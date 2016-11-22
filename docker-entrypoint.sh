@@ -19,4 +19,4 @@ for f in /docker-entrypoint-initdb.d/*; do
 			echo
 done
 
-su gpadmin -l -c "/gpadmin-entrypoint.sh"
+su gpadmin -l -c "export DATABASES=$DATABASES; /gpadmin-entrypoint.sh"
